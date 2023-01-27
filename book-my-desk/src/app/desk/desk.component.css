@@ -1,0 +1,10 @@
+.container{
+    display: flex;
+    position: relative;
+}
+
+.bookingCard{
+    position: absolute;
+    margin-left: 1%;
+    margin-top: -1%;
+}

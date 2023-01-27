@@ -1,0 +1,33 @@
+.navbar{
+    height: 100vh;
+}
+
+.desktopHeader{
+    background-color: rgb(37, 198, 209);
+}
+
+.title{
+    font-size: x-large;
+    color: black;
+}
+
+.menuIcon{
+    margin-right: 3%;
+}
+
+.spacer{
+    flex: 1 1 auto;
+}
+
+.listCon{
+    margin-right: 5%;
+}
+
+.listElement{
+    margin-right: 10%;
+    color: black;
+}
+
+.accountIcon{
+    margin-top: 5%;
+}

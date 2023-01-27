@@ -1,0 +1,25 @@
+<div class="bookingCard" *ngIf="isShown">
+    <div class="arrow">
+        <svg height="64px" width="64px" viewBox="0 0 483.05 483.05" transform="rotate(270)matrix(-1, 0, 0, 1, 0, 0)">
+            <polygon style="fill:#c2185b;" points="241.524,121.155 241.524,361.894 483.049,361.894 "/> <polygon style="fill:#c2185b;" 
+            points="0,361.894 241.524,361.894 241.524,121.155 "/>
+        </svg>
+    </div>
+    
+    <mat-card class="card">
+        <mat-card-header>
+            <mat-card-title class="title">Buchen</mat-card-title>
+        </mat-card-header>
+        <p class="date">{{startDate}} - {{endDate}}</p>
+        <div class="chooseButtons">
+            <button mat-mini-fab color="acent" class="arrowLeft"><mat-icon>arrow_left</mat-icon></button>
+            <button mat-mini-fab *ngFor="let i of [0, 1, 2, 3, 4]" [color]="buttonColors[i]" class="button" [disabled]="disabledButtons[i]" 
+            (click)="onClick(i)">{{days[i]}}</button>
+            <button mat-mini-fab color="acent" class="arrowRight"><mat-icon>arrow_right</mat-icon></button>
+        </div>
+        <div class="controlButtons">
+            <button mat-raised-button class="cancelButton">Abbruch</button>
+            <button mat-raised-button class="bookButton">Buchen</button>
+        </div>
+    </mat-card>
+</div>

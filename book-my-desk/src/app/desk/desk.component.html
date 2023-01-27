@@ -1,0 +1,8 @@
+<div class="container">
+    <svg [attr.width]="recWidth" [attr.height]="recHeight" (mouseover)="onHover()" (mouseout)="notHovored()">
+        <rect [attr.width]="recWidth" [attr.height]="recHeight" [attr.fill]="fillColor"/>
+    </svg>
+    <app-booking-card [isShown]="isHovored" class="bookingCard"></app-booking-card>
+</div>
+
+    
