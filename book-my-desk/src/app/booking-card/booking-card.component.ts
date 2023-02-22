@@ -1,19 +1,20 @@
-import { Component, Input, Output, EventEmitter} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import { DayButton as DayButton } from './dayButton';
+import { DateHandlerService } from '../date-handler.service';
 
 @Component({
   selector: 'app-booking-card',
   templateUrl: './booking-card.component.html',
   styleUrls: ['./booking-card.component.css']
 })
-export class BookingCardComponent {
+export class BookingCardComponent implements OnInit{
   @Input() isShown: boolean = false;
   @Input() deskId: number = 0;
   @Output() changeShadowStyleEvent = new EventEmitter();
   @Output() deskBookedEvent = new EventEmitter<boolean>();
 
-  startDate: string = "23.01.2023";
-  endDate: string = "27.01.2023";
+  startDate: string = "";
+  endDate: string = "";
 
   monButton = new DayButton("Mo", false);
   tueButton = new DayButton("Di", false);
@@ -25,10 +26,24 @@ export class BookingCardComponent {
   private readonly textBooking: string = "Buchen";
   private readonly textCancelBooking: string = "Stornieren";
   bookButtonText: string = this.textBooking;
+
   lastStateBooked: boolean = false;
 
-  dayButtonOnClick(button: DayButton) {
+  constructor(private dateHandlerService: DateHandlerService){}
+
+  ngOnInit() {
+    this.startDate = this.dateHandlerService.getFirstDateOfWeek();
+    this.endDate = this.dateHandlerService.getLastDateOfWeek();
+  }
+
+  onDayButtonClick(button: DayButton) {
     button.changeColor();
+  }
+
+  onChangeWeek(previousWeek: boolean) {
+    this.dateHandlerService.controlWeek(previousWeek);
+    this.startDate = this.dateHandlerService.getFirstDateOfWeek();
+    this.endDate = this.dateHandlerService.getLastDateOfWeek();
   }
 
   onCancel() {

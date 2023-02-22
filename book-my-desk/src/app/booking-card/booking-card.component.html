@@ -15,10 +15,10 @@
         </mat-card-header>
         <p class="date">{{startDate}} - {{endDate}}</p>
         <div class="chooseButtons">
-            <button mat-mini-fab color="acent" class="arrowLeft"><mat-icon>arrow_left</mat-icon></button>
+            <button mat-mini-fab color="acent" class="arrowLeft" (click)="onChangeWeek(true)"><mat-icon>arrow_left</mat-icon></button>
             <button mat-mini-fab *ngFor="let button of dayButtons" [color]="button.color" class="button" [disabled]="button.disabled" 
-            (click)="dayButtonOnClick(button)">{{button.name}}</button>
-            <button mat-mini-fab color="acent" class="arrowRight"><mat-icon>arrow_right</mat-icon></button>
+            (click)="onDayButtonClick(button)">{{button.name}}</button>
+            <button mat-mini-fab color="acent" class="arrowRight" (click)="onChangeWeek(false)"><mat-icon>arrow_right</mat-icon></button>
         </div>
         <div class="controlButtons">
             <button mat-raised-button class="cancelButton" (click)="onCancel()">Abbruch</button>

@@ -6,11 +6,12 @@
 
 .arrow{
     position: absolute;
+    left: 5%;
 }
 
 .card{
     width: fit-content;
-    margin-left: 48px;
+    margin-left: 20%;
 }
 
 .cardHeader{
