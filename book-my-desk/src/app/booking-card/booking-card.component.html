@@ -8,18 +8,21 @@
     
     <mat-card class="card">
         <mat-card-header>
-            <mat-card-title class="title">Buchen</mat-card-title>
+            <div class="cardHeader">
+                <mat-card-title class="title">Buchen</mat-card-title>
+                <mat-card-title class="deskId">#{{deskId}}</mat-card-title>
+            </div>
         </mat-card-header>
         <p class="date">{{startDate}} - {{endDate}}</p>
         <div class="chooseButtons">
             <button mat-mini-fab color="acent" class="arrowLeft"><mat-icon>arrow_left</mat-icon></button>
-            <button mat-mini-fab *ngFor="let i of [0, 1, 2, 3, 4]" [color]="buttonColors[i]" class="button" [disabled]="disabledButtons[i]" 
-            (click)="onClick(i)">{{days[i]}}</button>
+            <button mat-mini-fab *ngFor="let button of dayButtons" [color]="button.color" class="button" [disabled]="button.disabled" 
+            (click)="dayButtonOnClick(button)">{{button.name}}</button>
             <button mat-mini-fab color="acent" class="arrowRight"><mat-icon>arrow_right</mat-icon></button>
         </div>
         <div class="controlButtons">
-            <button mat-raised-button class="cancelButton">Abbruch</button>
-            <button mat-raised-button class="bookButton">Buchen</button>
+            <button mat-raised-button class="cancelButton" (click)="onCancel()">Abbruch</button>
+            <button mat-raised-button class="bookButton" (click)="onBook()">{{bookButtonText}}</button>
         </div>
     </mat-card>
 </div>

@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter} from '@angular/core';
+import { DayButton as DayButton } from './dayButton';
 
 @Component({
   selector: 'app-booking-card',
@@ -7,26 +8,46 @@ import { Component, Input } from '@angular/core';
 })
 export class BookingCardComponent {
   @Input() isShown: boolean = false;
+  @Input() deskId: number = 0;
+  @Output() changeShadowStyleEvent = new EventEmitter();
+  @Output() deskBookedEvent = new EventEmitter<boolean>();
 
   startDate: string = "23.01.2023";
   endDate: string = "27.01.2023";
-  days: string[] = ["Mo", "Di", "Mi", "Do", "Fr"];
-  buttonColors: string[] = ["primary", "primary", "primary", "primary", "primary"];
-  lastButtonColorDefault: boolean[] = [true, true, true, true, true];
-  disabledButtons: boolean[] = [];
 
-  onClick(buttonId: number) {
-    this.changeColor(buttonId);
+  monButton = new DayButton("Mo", false);
+  tueButton = new DayButton("Di", false);
+  wedButton = new DayButton("Mi", false);
+  thuButton = new DayButton("Do", false);
+  friButton = new DayButton("Fr", false);
+  dayButtons: DayButton[] = [this.monButton, this.tueButton, this.wedButton, this.thuButton, this.friButton];
+
+  private readonly textBooking: string = "Buchen";
+  private readonly textCancelBooking: string = "Stornieren";
+  bookButtonText: string = this.textBooking;
+  lastStateBooked: boolean = false;
+
+  dayButtonOnClick(button: DayButton) {
+    button.changeColor();
   }
 
-  changeColor(buttonId: number) {
-    if(this.lastButtonColorDefault[buttonId]) {
-      this.buttonColors[buttonId] = "acent";
-      this.lastButtonColorDefault[buttonId] = false;
+  onCancel() {
+    this.isShown = false;
+    this.changeShadowStyleEvent.emit();
+  }
+
+  onBook() {
+    if(!this.lastStateBooked) {
+      this.deskBookedEvent.emit(true);
+      this.bookButtonText = this.textCancelBooking;
+      this.changeShadowStyleEvent.emit();
+      this.lastStateBooked = true;
     }
-    else {
-      this.buttonColors[buttonId] = "primary";
-      this.lastButtonColorDefault[buttonId] = true;
+    else if(this.lastStateBooked) {
+      this.lastStateBooked = false;
+      this.bookButtonText = this.textBooking;
+      this.deskBookedEvent.emit(false);
+      this.changeShadowStyleEvent.emit();
     }
   }
 }

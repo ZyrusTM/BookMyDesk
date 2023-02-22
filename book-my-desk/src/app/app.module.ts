@@ -16,7 +16,9 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
 import { BookingComponent } from './booking/booking.component';
 import { DeskComponent } from './desk/desk.component';
-import { BookingCardComponent } from './booking-card/booking-card.component'
+import { BookingCardComponent } from './booking-card/booking-card.component';
+import { Room1Component } from './room1/room1.component';
+import { Room2Component } from './room2/room2.component'
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { BookingCardComponent } from './booking-card/booking-card.component'
     BookingComponent,
     DeskComponent,
     BookingCardComponent,
+    Room1Component,
+    Room2Component,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,44 @@
+.room1{
+    margin: 5%;
+    width: 25%;
+}
+
+.innerRoom{
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    background-color: rgb(100, 100, 100);
+}
+
+.door{
+    transform: rotate(180deg);
+    margin-left: 50%;
+}
+
+.tables{
+    display: flex;
+    margin-bottom: 3%;
+}
+
+.group1{
+    margin-left: 3%;
+}
+
+.group2{
+    margin-left: auto;
+    margin-right: 4%;
+}
+
+.subgroup1{
+    display: flex;
+}
+
+.subgroup2{
+    display: flex;
+    margin-top: 3%;
+}
+
+.desk2{
+    margin-left: 3%;
+}

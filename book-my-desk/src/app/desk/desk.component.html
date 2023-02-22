@@ -1,8 +1,8 @@
 <div class="container">
-    <svg [attr.width]="recWidth" [attr.height]="recHeight" (mouseover)="onHover()" (mouseout)="notHovored()">
+    <svg [ngClass]="[shadowStyle]" [attr.width]="recWidth" [attr.height]="recHeight" (click)="onClick()">
         <rect [attr.width]="recWidth" [attr.height]="recHeight" [attr.fill]="fillColor"/>
     </svg>
-    <app-booking-card [isShown]="isHovored" class="bookingCard"></app-booking-card>
+    <app-booking-card (changeShadowStyleEvent)="onClick()" (deskBookedEvent)="onDeskBooked($event)" [isShown]="isShown" [deskId]="deskId" class="bookingCard"></app-booking-card>
 </div>
 
     
