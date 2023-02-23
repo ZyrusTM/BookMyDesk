@@ -41,9 +41,8 @@ export class BookingCardComponent implements OnInit{
   }
 
   onChangeWeek(previousWeek: boolean) {
-    this.dateHandlerService.controlWeek(previousWeek);
-    this.startDate = this.dateHandlerService.getFirstDateOfWeek();
-    this.endDate = this.dateHandlerService.getLastDateOfWeek();
+    this.startDate = this.dateHandlerService.changeWeekStart(previousWeek);
+    this.endDate = this.dateHandlerService.changeWeekEnd(previousWeek);
   }
 
   onCancel() {

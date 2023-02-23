@@ -6,37 +6,61 @@ import { __values } from 'tslib';
 })
 export class DateHandlerService {
 
-  currentDate = new Date();
-  first = this.currentDate.getDate() - this.currentDate.getDay() + 1;
-  last = this.first + 4;
+  private currentDate: Date = new Date();
+  private first: number = this.currentDate.getDate() - this.currentDate.getDay() + 1;
+  private last: number = this.first + 4;
+
+  private nextWeekFirst: Date = new Date(this.currentDate.setDate(this.first + 1)); 
+  private nextWeekLast: Date = new Date(this.currentDate.setDate(this.last + 1)); 
+  private previousWeekFirst: Date = new Date(this.currentDate.setDate(this.first + 1)); 
+  private previousWeekLast: Date = new Date(this.currentDate.setDate(this.last + 1)); 
 
   getFirstDateOfWeek() {
     let firstDay = new Date(this.currentDate.setDate(this.first)).toUTCString();
-    let firstDaySplitted = firstDay.split(" ", 4);
-    let day = firstDaySplitted[1];
-    let month = this.convertNameToNumber(firstDaySplitted[2]);
-    let year = firstDaySplitted[3];
-    return `${day}.${month}.${year}`;
+    return this.format(firstDay);
   }
 
   getLastDateOfWeek() {
     let lastDay = new Date(this.currentDate.setDate(this.last)).toUTCString();
-    let lastDaySplitted = lastDay.split(" ", 4);
-    let day = lastDaySplitted[1];
-    let month = this.convertNameToNumber(lastDaySplitted[2]);
-    let year = lastDaySplitted[3];
-    return `${day}.${month}.${year}`;
+    return this.format(lastDay);
   }
 
-  controlWeek(previousWeek: boolean) {
-    if(previousWeek) {
-      this.first = this.currentDate.getDate() - this.currentDate.getDay() +1 - 7;
-      this.last = this.first + 4;
+  changeWeekStart(toPreviousWeek: boolean) {
+    if(toPreviousWeek) {
+      let previousWeek = new Date(this.previousWeekFirst.getFullYear(), this.previousWeekFirst.getMonth(), this.previousWeekFirst.getDate()-7);
+      this.previousWeekFirst = previousWeek;
+      this.nextWeekFirst = previousWeek;
+      return this.format(previousWeek.toUTCString());
     }
     else {
-      this.first = this.currentDate.getDate() - this.currentDate.getDay() +1 + 7;
-      this.last = this.first + 4;
+      let nextWeek = new Date(this.nextWeekFirst.getFullYear(), this.nextWeekFirst.getMonth(), this.nextWeekFirst.getDate()+7);
+      this.nextWeekFirst = nextWeek;
+      this.previousWeekFirst = nextWeek;
+      return this.format(nextWeek.toUTCString());
     }
+  }
+
+  changeWeekEnd(toPreviousWeek: boolean) {
+    if(toPreviousWeek) {
+      let previousWeek = new Date(this.previousWeekLast.getFullYear(), this.previousWeekLast.getMonth(), this.previousWeekLast.getDate()-7);
+      this.previousWeekLast = previousWeek;
+      this.nextWeekLast = previousWeek;
+      return this.format(previousWeek.toUTCString());
+    }
+    else {
+      let nextWeek = new Date(this.nextWeekLast.getFullYear(), this.nextWeekLast.getMonth(), this.nextWeekLast.getDate()+7);
+      this.nextWeekLast = nextWeek;
+      this.previousWeekLast = nextWeek;
+      return this.format(nextWeek.toUTCString());
+    }
+  }
+
+  private format(date: string) {
+    let dateSplitted = date.split(" ", 4);
+    let day = dateSplitted[1];
+    let month = this.convertNameToNumber(dateSplitted[2]);
+    let year = dateSplitted[3];
+    return `${day}.${month}.${year}`;
   }
 
   private convertNameToNumber(month: string) {
