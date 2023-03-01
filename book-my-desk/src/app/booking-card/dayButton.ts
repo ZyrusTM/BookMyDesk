@@ -4,6 +4,7 @@ export class DayButton{
     lastButtonColorDefault: boolean = true;
     disabled: boolean;
     date: string;
+    lastStateClicked: boolean;
 
     private readonly defaultColor: string = "primary";
     private readonly selectedColor: string = "acent";
@@ -13,6 +14,7 @@ export class DayButton{
         this.date = buttonDate;
         this.disabled = buttonDisabled;
         this.color = this.defaultColor;
+        this.lastStateClicked = false;
     }
 
     changeColor() {

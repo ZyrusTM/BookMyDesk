@@ -32,6 +32,14 @@ export class BookingCardComponent implements OnInit{
   }
 
   onDayButtonClick(button: DayButton) {
+    if(!button.lastStateClicked) {
+      this.bookingDataHandler.pushData(button.date);
+      button.lastStateClicked = true;
+    }
+    else {
+      this.bookingDataHandler.changeData(button.date);
+      button.lastStateClicked = false;
+    }
     button.changeColor();
   }
 
