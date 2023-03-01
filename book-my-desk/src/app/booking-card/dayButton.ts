@@ -3,14 +3,16 @@ export class DayButton{
     color: string;
     lastButtonColorDefault: boolean = true;
     disabled: boolean;
+    date: string;
 
     private readonly defaultColor: string = "primary";
     private readonly selectedColor: string = "acent";
 
-    constructor(buttonName: string, buttonDisabled: boolean) {
+    constructor(buttonName: string, buttonDisabled: boolean, buttonDate: string) {
         this.name = buttonName; 
-        this.color = this.defaultColor;
+        this.date = buttonDate;
         this.disabled = buttonDisabled;
+        this.color = this.defaultColor;
     }
 
     changeColor() {

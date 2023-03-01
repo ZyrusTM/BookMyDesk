@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { __values } from 'tslib';
 
 @Injectable({
   providedIn: 'root'
@@ -7,52 +6,58 @@ import { __values } from 'tslib';
 export class DateHandlerService {
 
   private currentDate: Date = new Date();
-  private first: number = this.currentDate.getDate() - this.currentDate.getDay() + 1;
-  private last: number = this.first + 4;
+  private firstDayOfCurrentWeek: number = this.currentDate.getDate() - this.currentDate.getDay() + 1;;
+  private datesOfCurrentWeek: Date[] = [];
 
-  private nextWeekFirst: Date = new Date(this.currentDate.setDate(this.first + 1)); 
-  private nextWeekLast: Date = new Date(this.currentDate.setDate(this.last + 1)); 
-  private previousWeekFirst: Date = new Date(this.currentDate.setDate(this.first + 1)); 
-  private previousWeekLast: Date = new Date(this.currentDate.setDate(this.last + 1)); 
+  private datesOfPreviousWeek: Date[] = [];
+  private datesOfNextWeek: Date[] = [];
 
-  getFirstDateOfWeek() {
-    let firstDay = new Date(this.currentDate.setDate(this.first)).toUTCString();
-    return this.format(firstDay);
+  getDatesOfCurrentWeek() {
+    let days: Date[] = [];
+    let daysFormatted: string[] = [];
+
+    for(let i = 0;i<5;i++) {
+      let monday = new Date(this.currentDate.setDate(this.firstDayOfCurrentWeek));
+      let nextDay = this.getNextDay(monday, i);
+      days.push(nextDay);
+      daysFormatted[i] = this.format(days[i].toUTCString());
+      this.currentDate = new Date();
+    }
+    this.datesOfCurrentWeek = days;
+    this.datesOfPreviousWeek = days;
+    this.datesOfNextWeek = days;
+    return daysFormatted;
   }
 
-  getLastDateOfWeek() {
-    let lastDay = new Date(this.currentDate.setDate(this.last)).toUTCString();
-    return this.format(lastDay);
-  }
+  changeWeek(toPreviousWeek: boolean) {
+    let days: Date[] = [];
+    let daysFormatted: string[] = [];
 
-  changeWeekStart(toPreviousWeek: boolean) {
     if(toPreviousWeek) {
-      let previousWeek = new Date(this.previousWeekFirst.getFullYear(), this.previousWeekFirst.getMonth(), this.previousWeekFirst.getDate()-7);
-      this.previousWeekFirst = previousWeek;
-      this.nextWeekFirst = previousWeek;
-      return this.format(previousWeek.toUTCString());
-    }
+      for(let i = 0;i<5;i++) {
+        days[i] = new Date(this.datesOfPreviousWeek[i].getFullYear(), this.datesOfPreviousWeek[i].getMonth(), this.datesOfPreviousWeek[i].getDate()-7);
+        daysFormatted[i] = this.format(new Date(this.datesOfPreviousWeek[i].getFullYear(), this.datesOfPreviousWeek[i].getMonth(), 
+        this.datesOfPreviousWeek[i].getDate()-6).toUTCString());
+      }
+      this.datesOfPreviousWeek = days;
+      this.datesOfNextWeek = days;      
+    }    
     else {
-      let nextWeek = new Date(this.nextWeekFirst.getFullYear(), this.nextWeekFirst.getMonth(), this.nextWeekFirst.getDate()+7);
-      this.nextWeekFirst = nextWeek;
-      this.previousWeekFirst = nextWeek;
-      return this.format(nextWeek.toUTCString());
+      for(let i = 0;i<5;i++) {
+        days[i] = new Date(this.datesOfNextWeek[i].getFullYear(), this.datesOfNextWeek[i].getMonth(), this.datesOfNextWeek[i].getDate()+7);
+        daysFormatted[i] = this.format(new Date(this.datesOfNextWeek[i].getFullYear(), this.datesOfNextWeek[i].getMonth(), 
+        this.datesOfNextWeek[i].getDate()+8).toUTCString());
+      }
+      this.datesOfNextWeek = days; 
+      this.datesOfPreviousWeek = days;
     }
+    return daysFormatted;
   }
 
-  changeWeekEnd(toPreviousWeek: boolean) {
-    if(toPreviousWeek) {
-      let previousWeek = new Date(this.previousWeekLast.getFullYear(), this.previousWeekLast.getMonth(), this.previousWeekLast.getDate()-7);
-      this.previousWeekLast = previousWeek;
-      this.nextWeekLast = previousWeek;
-      return this.format(previousWeek.toUTCString());
-    }
-    else {
-      let nextWeek = new Date(this.nextWeekLast.getFullYear(), this.nextWeekLast.getMonth(), this.nextWeekLast.getDate()+7);
-      this.nextWeekLast = nextWeek;
-      this.previousWeekLast = nextWeek;
-      return this.format(nextWeek.toUTCString());
-    }
+  private getNextDay(startDate: Date, dayAfter: number) {
+    let nextDate = startDate;
+    nextDate.setDate(nextDate.getDate() + dayAfter);
+    return nextDate;
   }
 
   private format(date: string) {

@@ -13,7 +13,7 @@
                 <mat-card-title class="deskId">#{{deskId}}</mat-card-title>
             </div>
         </mat-card-header>
-        <p class="date">{{startDate}} - {{endDate}}</p>
+        <p class="date">{{weekDays[0]}} - {{weekDays[4]}}</p>
         <div class="chooseButtons">
             <button mat-mini-fab color="acent" class="arrowLeft" (click)="onChangeWeek(true)"><mat-icon>arrow_left</mat-icon></button>
             <button mat-mini-fab *ngFor="let button of dayButtons" [color]="button.color" class="button" [disabled]="button.disabled" 

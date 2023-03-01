@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
-import { DayButton as DayButton } from './dayButton';
+import { DayButton } from './dayButton';
 import { DateHandlerService } from '../date-handler.service';
+import { BookingDataHandlerService } from '../booking-data-handler.service';
 
 @Component({
   selector: 'app-booking-card',
@@ -13,15 +14,9 @@ export class BookingCardComponent implements OnInit{
   @Output() changeShadowStyleEvent = new EventEmitter();
   @Output() deskBookedEvent = new EventEmitter<boolean>();
 
-  startDate: string = "";
-  endDate: string = "";
+  weekDays: string[] = [];
 
-  monButton = new DayButton("Mo", false);
-  tueButton = new DayButton("Di", false);
-  wedButton = new DayButton("Mi", false);
-  thuButton = new DayButton("Do", false);
-  friButton = new DayButton("Fr", false);
-  dayButtons: DayButton[] = [this.monButton, this.tueButton, this.wedButton, this.thuButton, this.friButton];
+  dayButtons: DayButton[] = [];
 
   private readonly textBooking: string = "Buchen";
   private readonly textCancelBooking: string = "Stornieren";
@@ -29,11 +24,11 @@ export class BookingCardComponent implements OnInit{
 
   lastStateBooked: boolean = false;
 
-  constructor(private dateHandlerService: DateHandlerService){}
+  constructor(private dateHandlerService: DateHandlerService, private bookingDataHandler: BookingDataHandlerService){}
 
   ngOnInit() {
-    this.startDate = this.dateHandlerService.getFirstDateOfWeek();
-    this.endDate = this.dateHandlerService.getLastDateOfWeek();
+    this.weekDays = this.dateHandlerService.getDatesOfCurrentWeek();
+    this.initializeButtons();
   }
 
   onDayButtonClick(button: DayButton) {
@@ -41,8 +36,7 @@ export class BookingCardComponent implements OnInit{
   }
 
   onChangeWeek(previousWeek: boolean) {
-    this.startDate = this.dateHandlerService.changeWeekStart(previousWeek);
-    this.endDate = this.dateHandlerService.changeWeekEnd(previousWeek);
+    this.weekDays = this.dateHandlerService.changeWeek(previousWeek);
   }
 
   onCancel() {
@@ -64,4 +58,10 @@ export class BookingCardComponent implements OnInit{
       this.changeShadowStyleEvent.emit();
     }
   }
+
+  private initializeButtons() {
+
+    this.dayButtons = [new DayButton("Mo", false, this.weekDays[0]), new DayButton("Di", false, this.weekDays[1]),
+     new DayButton("Mi", false, this.weekDays[2]), new DayButton("Do", false, this.weekDays[3]), new DayButton("Fr", false, this.weekDays[4])];
+  }    
 }
