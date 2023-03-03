@@ -54,6 +54,10 @@ export class DateHandlerService {
     return daysFormatted;
   }
 
+  getCurrentDate() {
+    return this.format(new Date().toUTCString());
+  }
+
   private getNextDay(startDate: Date, dayAfter: number) {
     let nextDate = startDate;
     nextDate.setDate(nextDate.getDate() + dayAfter);

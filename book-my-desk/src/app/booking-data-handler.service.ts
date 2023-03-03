@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DateHandlerService } from './date-handler.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,21 +8,36 @@ export class BookingDataHandlerService {
 
   private bookingList: string[] = [];
 
-  constructor() { }
+  constructor(private dateHandlerService: DateHandlerService) {}
 
-  fetchData() {}
-
-  pushData(date: string) {
-    this.bookingList.push(date);
+  pushData(selectedButtons: string[]) {
+    selectedButtons.forEach(element => {
+      this.bookingList.push(element);
+    });
     console.log(this.bookingList);
   }
 
-  changeData(date: string) {
-    for(let i = 0;i<this.bookingList.length;i++) {
-      if(this.bookingList[i] == date) {
-        this.bookingList.splice(i);
+  deleteData(unselectedButtons: string[], deleteAll: boolean) {
+    if(!deleteAll) {
+      this.bookingList = this.bookingList.filter( element => !unselectedButtons.includes(element));
+      console.log(this.bookingList);
+    }
+    else {
+      this.bookingList = [];
+      console.log(this.bookingList);
+    }
+  }
+
+  isCurrentDayBooked() {
+    for(const element of this.bookingList) {
+      if(element == this.dateHandlerService.getCurrentDate()) {
+        return true;
       }
     }
-    console.log(this.bookingList);
+    return false;
+  }
+
+  pullData() {
+
   }
 }

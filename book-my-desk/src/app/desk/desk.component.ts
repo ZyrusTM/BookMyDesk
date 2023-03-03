@@ -4,7 +4,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 @Component({
   selector: 'app-desk',
   templateUrl: './desk.component.html',
-  styleUrls: ['./desk.component.css']
+  styleUrls: ['./desk.component.scss']
 })
 export class DeskComponent {
   readonly recWidth: number = 50;
