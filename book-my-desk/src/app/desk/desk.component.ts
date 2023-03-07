@@ -1,5 +1,4 @@
-import { ThisReceiver } from '@angular/compiler';
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-desk',
@@ -17,24 +16,17 @@ export class DeskComponent {
   lastVisibilityState: boolean = false;
   shadowStyles: string[] = ["hovorShadow", "staticShadow"];
   shadowStyle: string = this.shadowStyles[0];
+  showDialog = false;
 
   @Input() isBooked: boolean = false;
   @Input() deskId: number = 0;
 
   onClick() {
-    if(!this.lastVisibilityState) {
-      this.isShown = true;
-      this.lastVisibilityState = true;
-      this.shadowStyle = this.shadowStyles[1];
-    }
-    else if(this.lastVisibilityState) {
-      this.isShown = false;
-      this.lastVisibilityState = false;
-      this.shadowStyle = this.shadowStyles[0];
-    }
+    this.showDialog = !this.showDialog;
   }
 
   onDeskBooked(changeToRed: boolean) {
+    this.showDialog = false;
     if(changeToRed) {
       this.fillColor = this.colorBooked;
     }

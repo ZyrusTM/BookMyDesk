@@ -65,7 +65,14 @@
 
 .button{
     margin-left: 5px;
+
+  
+    &.borderedButton{
+        border: 2px solid white;
+    }
 }
+
+
 
 .defaultButtonColor {
     background-color: rgb(0, 255, 0);

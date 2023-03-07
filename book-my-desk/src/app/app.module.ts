@@ -19,6 +19,7 @@ import { DeskComponent } from './desk/desk.component';
 import { BookingCardComponent } from './booking-card/booking-card.component';
 import { Room1Component } from './room1/room1.component';
 import { Room2Component } from './room2/room2.component'
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { Room2Component } from './room2/room2.component'
     Room2Component,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     RouterModule.forRoot([
       // {path: 'home', component: HomeComponent},

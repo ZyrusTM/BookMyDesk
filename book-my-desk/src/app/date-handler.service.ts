@@ -63,6 +63,8 @@ export class DateHandlerService {
     nextDate.setDate(nextDate.getDate() + dayAfter);
     return nextDate;
   }
+// date-fns
+// luxon
 
   private format(date: string) {
     let dateSplitted = date.split(" ", 4);

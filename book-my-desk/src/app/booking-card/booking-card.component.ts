@@ -1,16 +1,22 @@
-import { Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy, OnDestroy} from '@angular/core';
 import { DayButton } from './dayButton';
 import { DateHandlerService } from '../date-handler.service';
 import { BookingDataHandlerService } from '../booking-data-handler.service';
+import { DeskViewModel } from '../types';
 
+const myObject: {foo: string, bar: number} = {foo: '', bar: 42};
 @Component({
   selector: 'app-booking-card',
   templateUrl: './booking-card.component.html',
-  styleUrls: ['./booking-card.component.scss']
+  styleUrls: ['./booking-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BookingCardComponent implements OnInit{
+export class BookingCardComponent implements OnInit, OnDestroy{
   @Input() isShown: boolean = false;
   @Input() deskId: number = 0;
+  @Input() set deskData(value: DeskViewModel){
+    // const isBooked = value.bookedDays === Date.now;
+  }
   @Output() changeShadowStyleEvent = new EventEmitter();
   @Output() deskBookedEvent = new EventEmitter<boolean>();
 
@@ -25,24 +31,43 @@ export class BookingCardComponent implements OnInit{
   cancelAllButtonActive: boolean = false;
   pushedData: boolean = false;
   deletedData: boolean = false;
+isBookedDesk = false;
+isFreeDesk = true;
+isBookedByMe = false;
+  isDirty = false;
+  //  formGroup: FormGroup;
 
-  constructor(private dateHandlerService: DateHandlerService, private bookingDataHandler: BookingDataHandlerService){}
+  constructor(private dateHandlerService: DateHandlerService, private bookingDataHandler: BookingDataHandlerService){
+    console.log('constructed');
+    // this.formGroup;
+    // this.foormGroup.valueChanged.subscribe(values => { /* do sonethimg */});
+  }
+
+  ngOnDestroy(): void {
+      console.log('destrcuted');
+  }
 
   ngOnInit() {
     this.weekDays = this.dateHandlerService.getDatesOfCurrentWeek();
     this.initializeButtons();
+    this.weekDays.push('foo') // keine Detection
+    this.weekDays = ['foo']; // Change Detection triggered!
+    this.weekDays = this.weekDays.concat('bar'); // neues Array mit ['fo', 'bar']
+    myObject.foo = 'bar';
+    const myNewObject = {...myObject};
   }
 
   onDayButtonClick(button: DayButton) {
+    this.isDirty = true;
     if(!button.lastStateClicked) {
       this.selectedButtons.push(button.date);
       button.lastStateClicked = true;
-      if(this.changeButtonActive) this.pushedData = true;
+      this.pushedData = true;
     }
     else {
       this.buttonsToUnselect.push(button.date);
       button.lastStateClicked = false;
-      if(this.changeButtonActive) this.deletedData = true;
+      this.deletedData = true;
     }
     if(this.bookingDataHandler)
     button.changeColor();
@@ -61,22 +86,35 @@ export class BookingCardComponent implements OnInit{
     this.isShown = false;
     this.changeShadowStyleEvent.emit();
   }
+  // preList = ['day2'];
+// const myBookings = [{'day1', selected: true }, {'day2', selected: false}, ...];
+// const myBookings = [];
+  async onBook() {
+//     const res = await this.bookingDataHandler.pushData();
+// if(res.success){
+//   this.deskBookedEvent.emit(true);
+// }esle {
+//   // show error
+// }
 
-  onBook() {
-    this.bookingDataHandler.pushData(this.selectedButtons);
-    this.selectedButtons = [];
-    this.changeShadowStyleEvent.emit();
-    this.checkCurrentBookingState();
-    this.bookButtonActive = false;
-    this.changeButtonActive = true;
-    this.cancelAllButtonActive = true;
+    if(this.pushedData || this.deletedData) {
+      this.pushedData = false;
+      this.deletedData = false;
+      this.bookingDataHandler.pushData(this.selectedButtons, this.deskId);
+      this.selectedButtons = [];
+      this.changeShadowStyleEvent.emit();
+      this.checkCurrentBookingState();
+      this.bookButtonActive = false;
+      this.changeButtonActive = true;
+      this.cancelAllButtonActive = true;
+    }
   }
 
   onChangeBooking() {
     if(this.pushedData && this.deletedData) {
-      this.bookingDataHandler.deleteData(this.buttonsToUnselect, false);
+      this.bookingDataHandler.deleteData(this.buttonsToUnselect, false, this.deskId);
       this.buttonsToUnselect = [];
-      this.bookingDataHandler.pushData(this.selectedButtons);
+      this.bookingDataHandler.pushData(this.selectedButtons, this.deskId);
       this.selectedButtons = [];
       this.checkCurrentBookingState();
       this.changeShadowStyleEvent.emit();
@@ -90,16 +128,21 @@ export class BookingCardComponent implements OnInit{
       this.pushedData = false;
     }
     else if(this.deletedData) {
-      this.bookingDataHandler.deleteData(this.buttonsToUnselect, false);
+      this.bookingDataHandler.deleteData(this.buttonsToUnselect, false, this.deskId);
       this.buttonsToUnselect = [];
       this.checkCurrentBookingState();
       this.changeShadowStyleEvent.emit();
       this.deletedData = false;
+      if(this.allButtonsUnselected()) {
+        this.cancelAllButtonActive = false;
+        this.changeButtonActive = false;
+        this.bookButtonActive = true;
+      }
     }
   }
 
   onCancelAll() {
-    this.bookingDataHandler.deleteData(this.buttonsToUnselect, true);
+    this.bookingDataHandler.deleteData(this.buttonsToUnselect, true, this.deskId);
     this.buttonsToUnselect = [];
     this.checkCurrentBookingState();
     this.changeShadowStyleEvent.emit(); 
@@ -109,6 +152,13 @@ export class BookingCardComponent implements OnInit{
     this.bookButtonActive = true;
   }
 
+  highlightButton(button: DayButton) {
+    if(button.date == this.dateHandlerService.getCurrentDate()) {
+      return "borderedButton";
+    }
+    return "button";
+  }
+
   private initializeButtons() {
 
     this.dayButtons = [new DayButton("Mo", false, this.weekDays[0]), new DayButton("Di", false, this.weekDays[1]),
@@ -116,10 +166,10 @@ export class BookingCardComponent implements OnInit{
   }    
 
   private checkCurrentBookingState() {
-    if(this.bookingDataHandler.isCurrentDayBooked()) {
+    if(this.bookingDataHandler.isCurrentDayBooked(this.deskId)) {
       this.deskBookedEvent.emit(true);
     }
-    else if(!this.bookingDataHandler.isCurrentDayBooked()) {
+    else if(!this.bookingDataHandler.isCurrentDayBooked(this.deskId)) {
       this.deskBookedEvent.emit(false);
     }
   }
@@ -129,7 +179,6 @@ export class BookingCardComponent implements OnInit{
       if(button.lastStateClicked == true) {
         return false;
       }
-      console.log(button);
     }
     return true;
   }
