@@ -7,5 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'book-my-desk';
-  myDate = new Date();
 }

@@ -1,4 +1,4 @@
-<div class="bookingCard" *ngIf="isShown">
+<div class="bookingCard">
     <div class="arrow">
         <svg height="64px" width="64px" viewBox="0 0 483.05 483.05" transform="rotate(270)matrix(-1, 0, 0, 1, 0, 0)">
             <polygon style="fill:#c2185b;" points="241.524,121.155 241.524,361.894 483.049,361.894 "/> <polygon style="fill:#c2185b;" 
@@ -14,16 +14,16 @@
             </div>
         </mat-card-header>
         <div class="dateCon">
-            <p class="date">{{weekDays[0]}} - {{weekDays[4]}}</p>
+            <p class="date">{{weekDays[0] | date:"dd.MM.yyyy"}} - {{weekDays[4] | date:"dd.MM.yyyy"}}</p>
             <button mat-icon-button class="resetButton" (click)="onResetDate()"><mat-icon class="resetIcon">restore</mat-icon></button>
         </div>
         <div class="chooseButtons">
             <button mat-mini-fab color="acent" class="arrowLeft"  (click)="onChangeWeek(true)"><mat-icon>arrow_left</mat-icon></button>
-            <button mat-mini-fab *ngFor="let button of dayButtons" [ngClass]="[button.color, highlightButton(button)]" [disabled]="button.disabled" 
+            <button mat-mini-fab *ngFor="let button of dayButtons" class="dayButtons" [ngClass]="{'dayButtons-borderedButton': isCurrentDate(button), 
+            'dayButtons-freeButton': button.isFree, 'dayButtons-bookedButton': button.isBooked, 'dayButtons-bookedByMeButton': button.isBookedByMe}" [disabled]="button.disabled" 
             (click)="onDayButtonClick(button)">{{button.name}}</button>
             <button mat-mini-fab color="acent" class="arrowRight" (click)="onChangeWeek(false)"><mat-icon>arrow_right</mat-icon></button>
         </div>
-        <!-- [ngClass]="{'free-buttonn': isFreeDesk, 'booked-button': isBookedDesk, 'my-booked-button': isBookedByMe}"" -->
         <div class="controlButtons">
             <button mat-raised-button class="cancelButton" (click)="onCancel()">Abbruch</button>
             <button mat-raised-button *ngIf="bookButtonActive" class="bookButton" (click)="onBook()">Buchen</button>

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { BookingDataHandlerService } from './booking-data-handler.service';
+import { BookingDataHandlerService } from './desk-booking.service';
 
 describe('BookingDataHandlerService', () => {
   let service: BookingDataHandlerService;

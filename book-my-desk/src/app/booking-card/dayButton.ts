@@ -1,34 +1,32 @@
-export class DayButton{
+export class DayButton {
     name: string;
-    color: string;
     lastButtonColorDefault: boolean = true;
     disabled: boolean;
-    date: string;
+    date: Date;
     lastStateClicked: boolean;
+    isFree: boolean;
+    isBooked: boolean;
+    isBookedByMe: boolean;
 
-    private readonly defaultColor: string = "defaultButtonColor";
-    private readonly selectedColor: string = "selectedButtonColor";
-
-    constructor(buttonName: string, buttonDisabled: boolean, buttonDate: string) {
+    constructor(buttonName: string, buttonDisabled: boolean, buttonDate: Date, isFree: boolean, isBookedByMe: boolean) {
         this.name = buttonName; 
         this.date = buttonDate;
         this.disabled = buttonDisabled;
-        this.color = this.defaultColor;
         this.lastStateClicked = false;
+        this.isFree = isFree;
+        this.isBooked = this.isFree ? false : true;
+        this.isBookedByMe = isBookedByMe;
     }
 
-    changeColor() {
-        if(this.lastButtonColorDefault) {
-          this.color = this.selectedColor
-          this.lastButtonColorDefault = false;
-        }
-        else {
-          this.color = this.defaultColor;
-          this.lastButtonColorDefault = true;
-        }
+    onSelected() {
+      this.isBookedByMe = true;
+      this.isFree = false;
     }
 
-    resetColor() {
-      this.color = this.defaultColor;
+    onUnselected() {
+      this.isBookedByMe = false;
+      this.isFree = true;
     }
+
+
 }

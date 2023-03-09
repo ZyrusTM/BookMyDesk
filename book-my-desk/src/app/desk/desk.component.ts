@@ -9,29 +9,19 @@ export class DeskComponent {
   readonly recWidth: number = 50;
   readonly recHeight: number = 80;
 
-  readonly colorDefault: string = 'rgb(0, 255, 0)';
-  readonly colorBooked: string = 'rgb(255, 0, 0)';
-  fillColor: string = this.colorDefault;
-  isShown: boolean = false;
-  lastVisibilityState: boolean = false;
-  shadowStyles: string[] = ["hovorShadow", "staticShadow"];
-  shadowStyle: string = this.shadowStyles[0];
+  defaultColor: boolean = true;
+  staticShadow = false;
   showDialog = false;
 
-  @Input() isBooked: boolean = false;
   @Input() deskId: number = 0;
 
   onClick() {
     this.showDialog = !this.showDialog;
+    this.staticShadow = !this.staticShadow;
   }
 
-  onDeskBooked(changeToRed: boolean) {
+  onDeskBooked() {
     this.showDialog = false;
-    if(changeToRed) {
-      this.fillColor = this.colorBooked;
-    }
-    else {
-      this.fillColor = this.colorDefault;
-    }
+    this.defaultColor = !this.defaultColor;
   }
 }

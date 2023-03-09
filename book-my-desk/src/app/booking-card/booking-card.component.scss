@@ -63,23 +63,26 @@
     margin-left: 5px;
 }
 
-.button{
+.dayButtons{
     margin-left: 5px;
 
-  
-    &.borderedButton{
-        border: 2px solid white;
+    &-borderedButton{
+        border: 3px solid white;
     }
-}
 
+    &-freeButton{
+        background-color: rgb(0, 255, 0);
+    }
 
+    &-bookedButton{
+        background-color: rgb(255, 0, 0);
+        color: black;
+    }
 
-.defaultButtonColor {
-    background-color: rgb(0, 255, 0);
-}
-
-.selectedButtonColor{
-    background-color: rgb(255, 0, 0);
+    &-bookedByMeButton{
+        background-color: rgb(255, 123, 0);
+        color: black;
+    }
 }
 
 .controlButtons{
