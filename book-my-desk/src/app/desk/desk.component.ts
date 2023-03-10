@@ -20,8 +20,12 @@ export class DeskComponent {
     this.staticShadow = !this.staticShadow;
   }
 
-  onDeskBooked() {
-    this.showDialog = false;
-    this.defaultColor = !this.defaultColor;
+  onDeskBooked(isBooked: boolean) {
+    if(isBooked) {
+      this.defaultColor = false;
+    }
+    else {
+      this.defaultColor = true;
+    }
   }
 }

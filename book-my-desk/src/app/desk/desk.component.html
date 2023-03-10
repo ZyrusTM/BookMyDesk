@@ -2,7 +2,7 @@
     <svg class="hovorShadow" [ngClass]="{'defaultColor': defaultColor, 'bookedColor': !defaultColor, 'staticShadow': staticShadow}" [attr.width]="recWidth" [attr.height]="recHeight" (click)="onClick()">
         <rect [attr.width]="recWidth" [attr.height]="recHeight"/>
     </svg>
-    <app-booking-card *ngIf="showDialog" (changeShadowStyleEvent)="onClick()" (deskBookedEvent)="onDeskBooked()"
+    <app-booking-card *ngIf="showDialog" (changeShadowStyleEvent)="onClick()" (deskBookedEvent)="onDeskBooked($event)"
      [deskId]="deskId" class="bookingCard"></app-booking-card>
 </div>
 

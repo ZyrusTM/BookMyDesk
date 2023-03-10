@@ -1,32 +1,40 @@
 export class DayButton {
     name: string;
     lastButtonColorDefault: boolean = true;
-    disabled: boolean;
+    disabled: boolean = false;
     date: Date;
-    lastStateClicked: boolean;
-    isFree: boolean;
-    isBooked: boolean;
-    isBookedByMe: boolean;
+    lastStateClicked: boolean = false;
+    isFree: boolean = false;
+    isBooked: boolean = false;
+    isBookedByMe: boolean = false;
 
-    constructor(buttonName: string, buttonDisabled: boolean, buttonDate: Date, isFree: boolean, isBookedByMe: boolean) {
+    constructor(buttonName: string, buttonDate: Date) {
         this.name = buttonName; 
         this.date = buttonDate;
-        this.disabled = buttonDisabled;
-        this.lastStateClicked = false;
-        this.isFree = isFree;
-        this.isBooked = this.isFree ? false : true;
-        this.isBookedByMe = isBookedByMe;
+        this.setFree();
     }
 
-    onSelected() {
+    setBooked() {
+      this.isBooked = true;
+      this.isBookedByMe = false;
+      this.isFree = false;
+      this.disabled = true;
+      this.lastStateClicked = true;
+    }
+
+    setBookedByMe() {
       this.isBookedByMe = true;
       this.isFree = false;
+      this.isBooked = false;
+      this.disabled = false;
+      this.lastStateClicked = true;
     }
 
-    onUnselected() {
+    setFree() {
       this.isBookedByMe = false;
       this.isFree = true;
+      this.isBooked = false;
+      this.disabled = false;
+      this.lastStateClicked = false;
     }
-
-
 }

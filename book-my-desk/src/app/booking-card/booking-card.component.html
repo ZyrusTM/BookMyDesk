@@ -27,8 +27,8 @@
         <div class="controlButtons">
             <button mat-raised-button class="cancelButton" (click)="onCancel()">Abbruch</button>
             <button mat-raised-button *ngIf="bookButtonActive" class="bookButton" (click)="onBook()">Buchen</button>
-            <button mat-raised-button *ngIf="changeButtonActive" class="bookButton" (click)="onChangeBooking()">Ändern</button>
-            <button mat-raised-button *ngIf="cancelAllButtonActive" class="cancelAllButton" (click)="onCancelAll()">Alle Storn.</button>
+            <button mat-raised-button *ngIf="cancelButtonsActive" class="bookButton" (click)="onChangeBooking()">Ändern</button>
+            <button mat-raised-button *ngIf="cancelButtonsActive" class="cancelAllButton" (click)="onCancelAll()">Alle Storn.</button>
         </div>
     </mat-card>
 </div>
