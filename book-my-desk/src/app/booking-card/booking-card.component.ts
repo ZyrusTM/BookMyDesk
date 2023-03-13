@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy
 import { DayButton } from './dayButton';
 import { DateHandlerService } from '../date-handler.service';
 import { DeskBookingService } from '../desk-booking.service';
-import { DeskViewModel } from '../types';
+import { BookedDaysModel, DeskViewModel } from '../types';
 
 @Component({
   selector: 'app-booking-card',
@@ -44,11 +44,17 @@ export class BookingCardComponent implements OnInit{
   }
 
   onDayButtonClick(button: DayButton) {
-    let data: DeskViewModel = {
-      deskId: this.deskId,
+    let bookedDays: BookedDaysModel = {
       bookedDay: button.date,
       userId: this.userId
+    }
+
+    let data: DeskViewModel = {
+      deskId: this.deskId,
+      bookedDays: [] 
     };
+
+    data.bookedDays.push(bookedDays);
 
     if(!button.lastStateClicked) {
       this.selectedButtons.push(data);
@@ -108,11 +114,16 @@ export class BookingCardComponent implements OnInit{
   }
 
   private checkDataInconsistencies(data: DeskViewModel) {
-    this.selectedButtons.forEach(element => {
-      if(element.bookedDay.getDate() === data.bookedDay.getDate() && element.deskId === data.deskId && element.userId === data.userId) {
-        let index = this.selectedButtons.indexOf(element)
-        this.selectedButtons.splice(index, 1);
-      }
+    this.selectedButtons.forEach(selectedButton => {
+      selectedButton.bookedDays.forEach(selectedDays => {
+        data.bookedDays.forEach(toCheck => {
+          if(selectedDays.bookedDay.getDate() === toCheck.bookedDay.getDate() && selectedDays.userId === toCheck.userId
+           && selectedButton.deskId === data.deskId) {
+            let index = this.selectedButtons.indexOf(selectedButton);
+            this.selectedButtons.splice(index, 1);
+          }
+        });
+      });
     });
   }
 
@@ -122,16 +133,18 @@ export class BookingCardComponent implements OnInit{
       this.dayButtons.push(new DayButton(days[i], this.weekDays[i]));
     }
     this.bookingList.forEach(bookedDesk => {
-      this.dayButtons.forEach(dayButton => {
-        if(bookedDesk.bookedDay.getDate() === dayButton.date.getDate()) {
-          if(bookedDesk.userId === this.userId) {
-            dayButton.setBookedByMe();
+      bookedDesk.bookedDays.forEach(bookedDay => {
+        this.dayButtons.forEach(dayButton => {
+          if(bookedDay.bookedDay.getDate() === dayButton.date.getDate()) {
+            if(bookedDay.userId === this.userId) {
+              dayButton.setBookedByMe();
+            }
+            else {
+              dayButton.setBooked();
+            }
           }
-          else {
-            dayButton.setBooked();
-          }
-        }
-      });
+        });
+      })
     });
   }    
 

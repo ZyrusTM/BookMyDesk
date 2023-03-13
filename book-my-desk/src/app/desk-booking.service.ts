@@ -20,21 +20,25 @@ export class DeskBookingService {
 
   deleteCanceledDesk(canceledDesks: DeskViewModel[], deleteAll: boolean, deskId?: number, userId?: number) {
       this.bookingList.forEach(bookedDesk => {
-        if(deleteAll) {
-          if(bookedDesk.deskId === deskId && bookedDesk.userId === userId) {
-            let index = this.bookingList.indexOf(bookedDesk);
-            this.bookingList.splice(index);
-          }
-        }
-        else {
-          canceledDesks.forEach(canceledDesk => {
-            if(canceledDesk.bookedDay.getDate() === bookedDesk.bookedDay.getDate() && canceledDesk.deskId === bookedDesk.deskId 
-            && canceledDesk.userId === bookedDesk.userId) {
+        bookedDesk.bookedDays.forEach(bookedDay => {
+          if(deleteAll) {
+            if(bookedDesk.deskId === deskId && bookedDay.userId === userId) {
               let index = this.bookingList.indexOf(bookedDesk);
-              this.bookingList.splice(index, 1);
+              this.bookingList.splice(index);
             }
-          });
-        }
+          }
+          else {
+            canceledDesks.forEach(canceledDesk => {
+              canceledDesk.bookedDays.forEach(canceledDay => {
+                if(canceledDay.bookedDay.getDate() === bookedDay.bookedDay.getDate() && canceledDesk.deskId === bookedDesk.deskId 
+                && canceledDay.userId === bookedDay.userId) {
+                  let index = this.bookingList.indexOf(bookedDesk);
+                  this.bookingList.splice(index, 1);
+                }
+              });
+            });
+          }
+        });
       });
   }
 
@@ -44,10 +48,12 @@ export class DeskBookingService {
 
   isCurrentDayBooked(deskId: number) {
     let result: boolean = false;
-    this.bookingList.forEach(element => {
-      if(element.deskId === deskId && element.bookedDay.getDate() === new Date().getDate()) {
-        result = true;
-      }
+    this.bookingList.forEach(bookedDesk => {
+      bookedDesk.bookedDays.forEach(bookedDay => {
+        if(bookedDesk.deskId === deskId && bookedDay.bookedDay.getDate() === new Date().getDate()) {
+          result = true;
+        }
+      });
     });
     return result;
   }
