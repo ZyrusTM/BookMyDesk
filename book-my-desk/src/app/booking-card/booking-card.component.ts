@@ -3,6 +3,8 @@ import { DayButton } from './dayButton';
 import { DateHandlerService } from '../date-handler.service';
 import { DeskBookingService } from '../desk-booking.service';
 import { BookedDaysModel, DeskViewModel } from '../types';
+import { Observable } from 'rxjs';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-booking-card',
@@ -13,7 +15,6 @@ import { BookedDaysModel, DeskViewModel } from '../types';
 
 export class BookingCardComponent implements OnInit{
   @Input() deskId: number = 0;
-  @Input() userId: number = 0;
   @Output() changeShadowStyleEvent = new EventEmitter();
   @Output() deskBookedEvent = new EventEmitter<boolean>();
 
@@ -21,13 +22,16 @@ export class BookingCardComponent implements OnInit{
   weekDays: Date[] = [];
 
   dayButtons: DayButton[] = [];
-  private selectedButtons: DeskViewModel[] = [];
-  private buttonsToUnselect: DeskViewModel[] = [];
+  selectedButtons: DeskViewModel[] = [];
+  buttonsToUnselect: DeskViewModel[] = [];
 
   bookButtonActive: boolean = true;
   cancelButtonsActive: boolean = false;
 
-  constructor(private dateHandlerService: DateHandlerService, private deskBookingService: DeskBookingService){}
+  showBooking: boolean = true;
+  observable: Observable<number> = new Observable( ob => ob.next(100));
+
+  constructor(private dateHandlerService: DateHandlerService, private deskBookingService: DeskBookingService, private userService: UserService){}
 
   ngOnInit() {
     this.bookingList = this.deskBookingService.pullBookingList(this.deskId);
@@ -46,7 +50,7 @@ export class BookingCardComponent implements OnInit{
   onDayButtonClick(button: DayButton) {
     let bookedDays: BookedDaysModel = {
       bookedDay: button.date,
-      userId: this.userId
+      userId: 0
     }
 
     let data: DeskViewModel = {
@@ -82,35 +86,49 @@ export class BookingCardComponent implements OnInit{
 
   onBook() {
     if(this.selectedButtons.length != 0) {
-      this.deskBookingService.pushBookedDesk(this.selectedButtons);
-      this.selectedButtons = [];
-      this.changeShadowStyleEvent.emit();
+      this.deskBookingService.saveDesk(this.selectedButtons);
+      this.initializeInfo();
       this.checkCurrentBookingState();
     }
   }
 
   onChangeBooking() {
     if(this.selectedButtons && this.selectedButtons.length) {
-      this.deskBookingService.pushBookedDesk(this.selectedButtons);
-      this.selectedButtons = [];
+      this.deskBookingService.saveDesk(this.selectedButtons);
     }
     if(this.buttonsToUnselect && this.buttonsToUnselect.length) {
-      this.deskBookingService.deleteCanceledDesk(this.buttonsToUnselect, false);
-      this.buttonsToUnselect = [];
+      this.deskBookingService.cancelDesk(this.buttonsToUnselect, false);
     }
+    this.initializeInfo();
     this.checkCurrentBookingState();
-    this.changeShadowStyleEvent.emit();
   }
 
   onCancelAll() {
-    this.deskBookingService.deleteCanceledDesk(this.buttonsToUnselect, true, this.deskId, this.userId);
-    this.buttonsToUnselect = [];
-    this.changeShadowStyleEvent.emit();
+    this.deskBookingService.cancelDesk(this.buttonsToUnselect, true, this.deskId);
+    this.bookingList.forEach(element => {
+      this.buttonsToUnselect.push(element);
+    });
+    this.initializeInfo();
     this.checkCurrentBookingState();
   }
 
   isCurrentDate(button: DayButton) {
     return button.date.getDate() === new Date().getDate() ? true : false;
+  }
+
+  initializeInfo() {
+    this.showBooking = !this.showBooking;
+    let value = 100;
+    this.observable = new Observable( observer => {
+      const interval = setInterval(() => {
+        if(value <= 0) {
+          clearInterval(interval);
+          this.changeShadowStyleEvent.emit();
+        }
+        observer.next(value);
+        value--;
+      }, 200);
+    });
   }
 
   private checkDataInconsistencies(data: DeskViewModel) {
@@ -128,6 +146,7 @@ export class BookingCardComponent implements OnInit{
   }
 
   private initializeButtons() {
+    this.dayButtons = [];
     let days: string[] = ["Mo", "Di", "Mi", "Do", "Fr"];
     for(let i = 0;i<5;i++) {
       this.dayButtons.push(new DayButton(days[i], this.weekDays[i]));
@@ -136,7 +155,7 @@ export class BookingCardComponent implements OnInit{
       bookedDesk.bookedDays.forEach(bookedDay => {
         this.dayButtons.forEach(dayButton => {
           if(bookedDay.bookedDay.getDate() === dayButton.date.getDate()) {
-            if(bookedDay.userId === this.userId) {
+            if(bookedDay.userId === this.userService.getUserID()) {
               dayButton.setBookedByMe();
             }
             else {

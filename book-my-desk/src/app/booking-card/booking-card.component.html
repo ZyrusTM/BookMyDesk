@@ -6,7 +6,7 @@
         </svg>
     </div>
     
-    <mat-card class="card">
+    <mat-card class="card" *ngIf="showBooking">
         <mat-card-header>
             <div class="cardHeader">
                 <mat-card-title class="title">Buchen</mat-card-title>
@@ -29,6 +29,33 @@
             <button mat-raised-button *ngIf="bookButtonActive" class="bookButton" (click)="onBook()">Buchen</button>
             <button mat-raised-button *ngIf="cancelButtonsActive" class="bookButton" (click)="onChangeBooking()">Ändern</button>
             <button mat-raised-button *ngIf="cancelButtonsActive" class="cancelAllButton" (click)="onCancelAll()">Alle Storn.</button>
+        </div>
+    </mat-card>
+
+    <mat-card class="infoCard" *ngIf="!showBooking">
+        <mat-card-header>
+            <div class="infoHeader">
+                <mat-card-title class="infoTitle">Buchung bestätigt!</mat-card-title>
+                <mat-card-title class="infoDeskId">#{{deskId}}</mat-card-title>
+            </div>
+        </mat-card-header>
+
+        <div class="info">
+            <div *ngIf="this.selectedButtons && this.selectedButtons.length">
+                <p class="infoListTitle">Gebuchte Tage:</p>
+                <div class="infoList">
+                    <p class="infoElement" *ngFor="let bookedDay of selectedButtons">{{bookedDay.bookedDays[0].bookedDay | date: "dd.MM.yyyy"}}</p>
+                </div>
+            </div>
+            <div *ngIf="this.buttonsToUnselect && this.buttonsToUnselect.length"> 
+                <p class="infoListTitle">Stornierte Tage:</p>
+                <div class="infoList">
+                 <p class="infoElement" *ngFor="let bookedDay of buttonsToUnselect">{{bookedDay.bookedDays[0].bookedDay | date: "dd.MM.yyyy"}}</p>
+                </div>
+            </div>
+
+            <mat-progress-bar [value]="observable | async"></mat-progress-bar>
+            <button mat-raised-button class="cancelInfo" (click)="onCancel()">Schließen</button>
         </div>
     </mat-card>
 </div>

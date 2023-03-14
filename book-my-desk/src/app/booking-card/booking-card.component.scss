@@ -107,3 +107,47 @@
     margin-right: 0.5rem;
     background-color: #c2185b;
 }
+
+.infoCard{
+    width: fit-content;
+    min-width: 20rem;
+    margin-left: 4rem;
+}
+
+.infoHeader {
+    display: flex;
+}
+
+.infoTitle{
+    color: #c2185b;
+}
+
+.infoDeskId{
+    color: #c2185b;
+    margin-left: 2rem;
+}
+
+.info{
+    margin-top: 1rem;
+}
+
+.infoListTitle{
+    margin-left: 2rem;
+}
+
+.infoList{
+    display: flex;
+    margin-left: 2rem;
+}
+
+.infoElement{
+    margin-right: 0.5rem;
+}
+
+.cancelInfo{
+    float: right;
+    margin-right: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: #c2185b;
+}

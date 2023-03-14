@@ -20,6 +20,7 @@ import { BookingCardComponent } from './booking-card/booking-card.component';
 import { Room1Component } from './room1/room1.component';
 import { Room2Component } from './room2/room2.component'
 import { CommonModule } from '@angular/common';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { CommonModule } from '@angular/common';
     MatListModule,
     MatCardModule,
     MatButtonModule,
-    MatMenuModule
+    MatMenuModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

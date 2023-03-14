@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { DateHandlerService } from './date-handler.service';
 import { DeskViewModel } from './types';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,19 +10,22 @@ export class DeskBookingService {
 
   private bookingList: DeskViewModel[] = [];
 
-  constructor(private dateHandlerService: DateHandlerService) {}
+  constructor(private userService: UserService) {}
 
-  pushBookedDesk(selectedButtons: DeskViewModel[]) {
+  saveDesk(selectedButtons: DeskViewModel[]) {
     selectedButtons.forEach(element => {
+      element.bookedDays.forEach(bookedDay => {
+        bookedDay.userId = this.userService.getUserID();
+      });
       this.bookingList.push(element);
     });
   }
 
-  deleteCanceledDesk(canceledDesks: DeskViewModel[], deleteAll: boolean, deskId?: number, userId?: number) {
+  cancelDesk(canceledDesks: DeskViewModel[], deleteAll: boolean, deskId?: number) {
       this.bookingList.forEach(bookedDesk => {
         bookedDesk.bookedDays.forEach(bookedDay => {
           if(deleteAll) {
-            if(bookedDesk.deskId === deskId && bookedDay.userId === userId) {
+            if(bookedDesk.deskId === deskId && bookedDay.userId === this.userService.getUserID()) {
               let index = this.bookingList.indexOf(bookedDesk);
               this.bookingList.splice(index);
             }
