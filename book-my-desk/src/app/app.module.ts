@@ -17,10 +17,10 @@ import {MatMenuModule} from '@angular/material/menu';
 import { BookingComponent } from './booking/booking.component';
 import { DeskComponent } from './desk/desk.component';
 import { BookingCardComponent } from './booking-card/booking-card.component';
-import { Room1Component } from './room1/room1.component';
-import { Room2Component } from './room2/room2.component'
+import { RoomComponent } from './room/room.component';
 import { CommonModule } from '@angular/common';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -29,8 +29,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     BookingComponent,
     DeskComponent,
     BookingCardComponent,
-    Room1Component,
-    Room2Component,
+    RoomComponent,
   ],
   imports: [
     CommonModule,
@@ -50,7 +49,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatCardModule,
     MatButtonModule,
     MatMenuModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,9 +1,8 @@
-export interface BookedDaysModel {
-     bookedDay: Date,
-     userId: number
-}
+import { BookingApiModel, DeskApiModel, RoomApiModel } from "./mock-data";
 
-export interface DeskViewModel {
-     deskId: number;
-     bookedDays: BookedDaysModel[];
-}
+export type BookingViewModel = Omit<BookingApiModel, "bookedAt"> & {bookedAt: Date}
+
+export type DeskViewModel = Omit<DeskApiModel, "bookings" | "position" | "size">  & {bookings: ReadonlyArray<BookingViewModel>, 
+     position?: {x: number, y: number}, size?: {width: number, height: number}}
+
+export type RoomViewModel = Omit<RoomApiModel, 'desks'> & {desks: ReadonlyArray<DeskViewModel>};

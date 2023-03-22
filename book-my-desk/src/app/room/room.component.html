@@ -1,0 +1,42 @@
+<mat-card class="room" *ngIf="room">
+    <mat-card-header>
+        <mat-card-title>{{room.name ? room.name : "Raum #" + room.id}}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card class="innerRoom" [style.width.px]="room.size.width" [style.height.px]="room.size.height">
+
+        <div *ngIf="isBlurred" class="notBookable">
+            <mat-card-header>
+                <mat-card-title><strong>Currently unavailable!</strong></mat-card-title>
+            </mat-card-header>
+            <ul>
+                <strong *ngIf="room.bookable.reason">Reason: {{room.bookable.reason}}</strong>
+                <div *ngIf=" room && this.room.bookable?.blockedAt?.length !== 0" class="blockedDays">
+                    <strong>Blocked Days: </strong>
+                    <p *ngFor="let day of room.bookable?.blockedAt"><strong class="blockedDay">{{day | date: "dd.MM.yyyy"}}</strong></p>
+                </div>
+            </ul>
+        </div>
+
+        <div [ngClass]="{'innerRoom-blurred': isBlurred}">
+            <svg class="door" width="30px" height="30px" viewBox="0 0 512 400" preserveAspectRatio="xMidYMid meet">
+                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+                fill="#000000" stroke="none">
+                    <path d="M0 2811 l0 -2251 450 0 450 0 0 2100 0 2099 68 -5 c380 -28 606 -67
+                    929 -160 345 -98 734 -275 1043 -472 955 -612 1616 -1597 1814 -2707 38 -215
+                    66 -488 66 -651 l0 -74 150 0 150 0 0 83 c0 108 -25 404 -45 542 -89 613 -314
+                    1218 -643 1730 -300 465 -697 883 -1142 1202 -546 390 -1203 659 -1855 759
+                    -266 41 -346 45 -892 51 l-543 5 0 -2251z"/>
+                    <path d="M382 449 c-48 -14 -109 -80 -123 -131 -23 -89 12 -182 88 -229 57
+                    -36 154 -34 210 3 62 41 88 90 88 168 0 77 -26 127 -85 166 -43 29 -125 39
+                    -178 23z"/>
+                </g>
+            </svg>
+    
+            <mat-card>
+                <app-desk class="desk" *ngFor="let desk of room.desks" [style.top.px]="desk.position?.y" [style.left.px]="desk.position?.x" 
+                [desk]="desk" [isBlurred]="isBlurred"></app-desk>
+            </mat-card>
+        </div>
+    </mat-card>
+</mat-card>

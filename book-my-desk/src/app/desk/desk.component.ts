@@ -1,23 +1,35 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { DeskBookingService } from '../desk-booking.service';
+import { DeskViewModel } from '../types';
 
 @Component({
   selector: 'app-desk',
   templateUrl: './desk.component.html',
   styleUrls: ['./desk.component.scss']
 })
-export class DeskComponent {
-  readonly recWidth: number = 50;
-  readonly recHeight: number = 80;
+export class DeskComponent implements OnInit {
+  @Input() desk?: DeskViewModel;
+  @Input() isBlurred: boolean = false;
+  @Output() bookingCardActiveEvent = new EventEmitter<number>();
 
   defaultColor: boolean = true;
   staticShadow = false;
   showDialog = false;
 
-  @Input() deskId: number = 0;
+  constructor(private deskBookingService: DeskBookingService) {}
+
+  ngOnInit() {
+    if(this.deskBookingService.isCurrentDayBooked(this.desk)) {
+      this.onDeskBooked(true);
+    }
+  }
 
   onClick() {
-    this.showDialog = !this.showDialog;
-    this.staticShadow = !this.staticShadow;
+    if(!this.isBlurred) {
+      this.bookingCardActiveEvent.emit(this.desk?.id);
+      this.showDialog = !this.showDialog;
+      this.staticShadow = !this.staticShadow;
+    }
   }
 
   onDeskBooked(isBooked: boolean) {

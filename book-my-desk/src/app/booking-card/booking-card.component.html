@@ -1,4 +1,4 @@
-<div class="bookingCard">
+<div class="bookingCard" *ngIf="desk">
     <div class="arrow">
         <svg height="64px" width="64px" viewBox="0 0 483.05 483.05" transform="rotate(270)matrix(-1, 0, 0, 1, 0, 0)">
             <polygon style="fill:#c2185b;" points="241.524,121.155 241.524,361.894 483.049,361.894 "/> <polygon style="fill:#c2185b;" 
@@ -10,17 +10,18 @@
         <mat-card-header>
             <div class="cardHeader">
                 <mat-card-title class="title">Buchen</mat-card-title>
-                <mat-card-title class="deskId">#{{deskId}}</mat-card-title>
+                <mat-card-title class="deskId">{{desk.name ? desk.name : "#" + desk.id}}</mat-card-title>
             </div>
         </mat-card-header>
         <div class="dateCon">
-            <p class="date">{{weekDays[0] | date:"dd.MM.yyyy"}} - {{weekDays[4] | date:"dd.MM.yyyy"}}</p>
+            <p class="date">{{weekDays[0] | date:"dd.MM.yyyy"}} - {{weekDays[6] | date:"dd.MM.yyyy"}}</p>
             <button mat-icon-button class="resetButton" (click)="onResetDate()"><mat-icon class="resetIcon">restore</mat-icon></button>
         </div>
         <div class="chooseButtons">
             <button mat-mini-fab color="acent" class="arrowLeft"  (click)="onChangeWeek(true)"><mat-icon>arrow_left</mat-icon></button>
-            <button mat-mini-fab *ngFor="let button of dayButtons" class="dayButtons" [ngClass]="{'dayButtons-borderedButton': isCurrentDate(button), 
-            'dayButtons-freeButton': button.isFree, 'dayButtons-bookedButton': button.isBooked, 'dayButtons-bookedByMeButton': button.isBookedByMe}" [disabled]="button.disabled" 
+            <button mat-mini-fab *ngFor="let button of dayButtons" class="dayButtons" [ngClass]="{'dayButtons-borderedButton': button.currentDay, 
+            'dayButtons-freeButton': button.bookingStatus === 'free', 'dayButtons-bookedButton': button.bookingStatus === 'booked', 
+            'dayButtons-bookedByMeButton': button.bookingStatus === 'booked-by-me'}" [disabled]="button.bookingStatus === 'booked'" 
             (click)="onDayButtonClick(button)">{{button.name}}</button>
             <button mat-mini-fab color="acent" class="arrowRight" (click)="onChangeWeek(false)"><mat-icon>arrow_right</mat-icon></button>
         </div>
@@ -36,7 +37,7 @@
         <mat-card-header>
             <div class="infoHeader">
                 <mat-card-title class="infoTitle">Buchung bestätigt!</mat-card-title>
-                <mat-card-title class="infoDeskId">#{{deskId}}</mat-card-title>
+                <mat-card-title class="infoDeskId">#{{desk.id}}</mat-card-title>
             </div>
         </mat-card-header>
 
@@ -44,13 +45,13 @@
             <div *ngIf="this.selectedButtons && this.selectedButtons.length">
                 <p class="infoListTitle">Gebuchte Tage:</p>
                 <div class="infoList">
-                    <p class="infoElement" *ngFor="let bookedDay of selectedButtons">{{bookedDay.bookedDays[0].bookedDay | date: "dd.MM.yyyy"}}</p>
+                    <p class="infoElement" *ngFor="let bookedDay of selectedButtons">{{bookedDay.bookings[0].bookedAt | date: "dd.MM.yyyy"}}</p>
                 </div>
             </div>
             <div *ngIf="this.buttonsToUnselect && this.buttonsToUnselect.length"> 
                 <p class="infoListTitle">Stornierte Tage:</p>
                 <div class="infoList">
-                 <p class="infoElement" *ngFor="let bookedDay of buttonsToUnselect">{{bookedDay.bookedDays[0].bookedDay | date: "dd.MM.yyyy"}}</p>
+                 <p class="infoElement" *ngFor="let bookedDay of buttonsToUnselect">{{bookedDay.bookings[0].bookedAt | date: "dd.MM.yyyy"}}</p>
                 </div>
             </div>
 
