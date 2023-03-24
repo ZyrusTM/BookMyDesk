@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { DayButton } from './dayButton';
-import { getDatesOfCurrentWeek, changeWeek } from '../date-utils';
-import { DeskBookingService } from '../desk-booking.service';
-import { BookingViewModel, DeskViewModel } from '../types';
+import { getDatesOfCurrentWeek, changeWeek } from '../../../common/utils/date-utils';
+import { DeskBookingService } from '../../services/desk-booking.service';
+import { BookingViewModel, DeskViewModel } from '../../booking-api/types';
 import { Observable } from 'rxjs';
-import { UserService } from '../user.service';
+import { UserService } from '../../../user/user.service';
 
 @Component({
   selector: 'app-booking-card',
@@ -176,7 +176,7 @@ export class BookingCardComponent implements OnInit{
     if(currentDayButton){
       currentDayButton.currentDay = true;
     }
-  }    
+  }
 
   private checkCurrentBookingState() {
     if(this.deskBookingService.isCurrentDayBooked(this.desk)) {

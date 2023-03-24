@@ -1,8 +1,8 @@
 import { Injectable, OnInit } from '@angular/core';
 import { delay, firstValueFrom, map, Observable, of, Subject, tap } from 'rxjs';
-import { mockRoomData} from './mock-data';
-import { DeskViewModel, RoomViewModel } from './types';
-import { UserService } from './user.service';
+import { mockRoomData} from '../mocks/mock-data';
+import { DeskViewModel, RoomViewModel } from '../booking-api/types';
+import { UserService } from '../../user/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +52,7 @@ export class DeskBookingService {
     return firstValueFrom(of(mockRoomData).pipe(delay(200),
       map(rooms => {
         return rooms.map(room => {
-          return { 
+          return {
             ...room,
             desks: room.desks.map(desk => {
               return {

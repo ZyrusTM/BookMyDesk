@@ -1,9 +1,9 @@
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
-import { DeskBookingService } from '../desk-booking.service';
-import { RoomApiModel } from '../mock-data';
-import { RoomViewModel } from '../types';
+import { DeskBookingService } from '../../services/desk-booking.service';
+import { RoomApiModel } from '../../mocks/mock-data';
+import { RoomViewModel } from '../../booking-api/types';
 
 @Component({
   selector: 'app-booking',

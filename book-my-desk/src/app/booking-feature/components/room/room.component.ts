@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { RoomApiModel } from '../mock-data';
-import { RoomViewModel } from '../types';
+import { RoomApiModel } from '../../mocks/mock-data';
+import { RoomViewModel } from '../../booking-api/types';
 
 @Component({
   selector: 'app-room',

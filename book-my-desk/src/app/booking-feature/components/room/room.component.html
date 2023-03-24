@@ -1,6 +1,6 @@
 <mat-card class="room" *ngIf="room">
     <mat-card-header>
-        <mat-card-title>{{room.name ? room.name : "Raum #" + room.id}}</mat-card-title>
+        <mat-card-title class="title">{{room.name ? room.name : "Raum #" + room.id}}</mat-card-title>
     </mat-card-header>
 
     <mat-card class="innerRoom" [style.width.px]="room.size.width" [style.height.px]="room.size.height">
@@ -32,9 +32,9 @@
                     -178 23z"/>
                 </g>
             </svg>
-    
+
             <mat-card>
-                <app-desk class="desk" *ngFor="let desk of room.desks" [style.top.px]="desk.position?.y" [style.left.px]="desk.position?.x" 
+                <app-desk class="desk" *ngFor="let desk of room.desks" [style.top.px]="desk.position?.y" [style.left.px]="desk.position?.x"
                 [desk]="desk" [isBlurred]="isBlurred"></app-desk>
             </mat-card>
         </div>

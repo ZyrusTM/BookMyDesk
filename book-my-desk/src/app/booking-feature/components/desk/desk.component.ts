@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DeskBookingService } from '../desk-booking.service';
-import { DeskViewModel } from '../types';
+import { DeskBookingService } from '../../services/desk-booking.service';
+import { DeskViewModel } from '../../booking-api/types';
 
 @Component({
   selector: 'app-desk',
