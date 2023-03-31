@@ -1,0 +1,6 @@
+/templates
+/venv
+/booking/migrations
+/booking/__pycache__
+/.idea
+/BookMyDesk/__pycache__
